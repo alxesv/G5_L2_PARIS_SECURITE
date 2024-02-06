@@ -15,6 +15,7 @@
 # Lock files
 /frontend/package-lock.json
 /backend/package-lock.json
+package-lock.json
 
 # macOS metadata #
 /.DS_Store
