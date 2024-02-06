@@ -1,0 +1,23 @@
+# OS generated files #
+.DS_Store
+
+# Node.js dependencies #
+/backend/node_modules
+/frontend/node_modules
+
+# Next.js build output #
+/frontend/.next
+
+# Environment variables #
+/frontend/.env
+/backend/.env
+
+# Lock files
+/frontend/package-lock.json
+/backend/package-lock.json
+
+# macOS metadata #
+/.DS_Store
+.AppleDouble
+.LSOverride
+
