@@ -14,7 +14,7 @@ router.post('/', async (req, res, next) => {
 		isPrivate: private
 	}
 
-	const currentUser = await db.collection("users").findOne({username: "alex"})
+	const currentUser = await db.collection("users").findOne({username: req.auth.username})
 	let alreadyExists = false
     
 	if (currentUser.allergies) {
@@ -29,7 +29,7 @@ router.post('/', async (req, res, next) => {
 	}
 
 	if (!alreadyExists) {
-		await db.collection("users").updateOne({username: "alex"}, {$addToSet: {allergies: allergy}})
+		await db.collection("users").updateOne({username:req.auth.username}, {$addToSet: {allergies: allergy}})
 		console.log("Allergy added")
 	}
 

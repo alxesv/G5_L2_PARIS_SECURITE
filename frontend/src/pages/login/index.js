@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import React from "react";
 
 export default function Login() {
-  const [name, setName] = React.useState("");
+  const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [result, setResult] = React.useState({});
   const router = useRouter();
@@ -17,7 +17,7 @@ export default function Login() {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, password }),
+        body: JSON.stringify({ username, password }),
       });
 
       const result = await response.json();
@@ -25,7 +25,7 @@ export default function Login() {
       if (!response.ok) {
         return;
       }
-      setName("");
+      setUsername("");
       setPassword("");
       router.push("/");
     } catch (error) {
@@ -38,13 +38,13 @@ export default function Login() {
       <section>
         <div>{result.message}</div>
         <form onSubmit={(e) => handleSubmit(e)}>
-          <label htmlFor="name">Name</label>
+          <label htmlFor="login-name">Name</label>
           <br />
           <input
             type="text"
-            id="login-name"
+            id="login-name" value={username}
             onChange={(e) => {
-              setName(e.target.value);
+              setUsername(e.target.value);
             }}
           />
           <br />
@@ -53,6 +53,7 @@ export default function Login() {
           <input
             type="password"
             id="login-password"
+            value={password}
             onChange={(e) => {
               setPassword(e.target.value);
             }}

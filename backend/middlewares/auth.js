@@ -2,19 +2,19 @@ const jwt = require('jsonwebtoken')
 
 exports.auth = (req, res, next) => {
 	try {
-		const token = req.headers.authorization
+		const token = req.headers.authorization.split(' ')[1]
 		if(!token){
-			res.status(401).json({message: "Vous n'êtes pas autorisé à y accéder !"})
+			return res.status(401).json({message: "Vous n'êtes pas autorisé à y accéder !"})
 
 		}
 		jwt.verify(token, process.env.SECRET_KEY, (err, decoded)=>{
 			if(err || !decoded){
-				res.status(401).json({message: "Invalid token !"})
+				return res.status(401).json({message: "Invalid token !"})
 			}
-            const {name} = decoded
+            const {username} = decoded
 		
         req.auth = {
-            name
+            username
         }
 		next()
     })

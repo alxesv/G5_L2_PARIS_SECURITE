@@ -5,10 +5,10 @@ const router = express.Router()
 
 router.post("/", async (req, res, next) => {
 	try {
-		const { password, name } = req.body
+		const { password, username } = req.body
 		const hashedPassword = await bcrypt.hash(password, 10)
 		const userCreated = await User.create({
-			name,
+			username,
 			password: hashedPassword
 		})
 		if (!userCreated) {
@@ -18,7 +18,7 @@ router.post("/", async (req, res, next) => {
 		}
 		res.status(201).json({
 			message: "Inscription réussi",
-			user: {name:userCreated.name}
+			user: {username:userCreated.username}
 		})
 	} catch (error) {
 		console.log("Error : ", error.message)

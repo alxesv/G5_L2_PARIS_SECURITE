@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import React from "react";
 
 export default function Register() {
-  const [name, setName] = React.useState("");
+  const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [result, setResult] = React.useState({});
   const router = useRouter();
@@ -15,14 +15,14 @@ export default function Register() {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, password }),
+        body: JSON.stringify({ username, password }),
       });
       const result = await response.json();
       setResult(result);
       if (!response.ok) {
         return;
       }
-      setName("");
+      setUsername("");
       setPassword("");
       router.push("/login");
     } catch (error) {
@@ -35,13 +35,14 @@ export default function Register() {
       <section>
         <div>{result.message}</div>
         <form onSubmit={(e) => handleSubmit(e)}>
-          <label htmlFor="name">Name</label>
+          <label htmlFor="register-name">Name</label>
           <br />
           <input
             type="text"
             id="register-name"
+            value={username}
             onChange={(e) => {
-              setName(e.target.value);
+              setUsername(e.target.value);
             }}
           />
           <br />
@@ -51,6 +52,7 @@ export default function Register() {
           <input
             type="password"
             id="register-password"
+            value={password}
             onChange={(e) => {
               setPassword(e.target.value);
             }}
