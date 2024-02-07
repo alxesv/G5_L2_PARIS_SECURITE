@@ -18,3 +18,4 @@ app.listen(port, () => {
 
 app.use("/register", require("./routes/Register"))
 app.use("/login", require("./routes/Login"))
+app.use("/allergies", require("./routes/Allergies"))
