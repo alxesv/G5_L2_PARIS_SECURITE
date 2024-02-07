@@ -12,10 +12,10 @@ export default async function handler(req, res) {
     const result = await response.json();
     if (!response.ok)
       return res.status(401).json({ message: response.statusText });
-    setCookie("user", JSON.stringify(result.user), {
+    setCookie("accessToken", result.accessToken, {
       req,
       res,
-      maxAge: 60 * 60 * 24 * 7, // 1 week
+      maxAge: 60 * 60, // 1 hour
       path: "/",
     });
     res.status(200).json(result);
