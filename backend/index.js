@@ -21,4 +21,7 @@ app.listen(port, () => {
 
 app.use("/register", require("./routes/Register"))
 app.use("/login", require("./routes/Login"))
-app.use("/submit", auth, require("./routes/Submit"))
+app.use("/submit", require("./routes/Submit"))
+app.use("/users", require("./routes/Users.js"))
+app.use("/remove", require("./routes/Remove.js"))
+app.use('/admin', require('./routes/Admin.js'))
