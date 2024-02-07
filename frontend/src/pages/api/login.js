@@ -18,6 +18,12 @@ export default async function handler(req, res) {
       maxAge: 60 * 60 * 24 * 7, // 1 week
       path: "/",
     });
+    setCookie("accessToken", result.accessToken, {
+      req,
+      res,
+      maxAge: 60 * 60, // 1 hour
+      path: "/",
+    });
     res.status(200).json(result);
   } catch (error) {
     res.json(error);

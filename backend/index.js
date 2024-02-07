@@ -4,6 +4,7 @@ const app = express()
 app.use(express.json({strict: false}))
 const port = 3000
 const mongoose = require("mongoose")
+const { auth } = require("./middlewares/auth")
 
 mongoose
 	.connect(process.env.MONGO_URI)
@@ -20,4 +21,4 @@ app.listen(port, () => {
 
 app.use("/register", require("./routes/Register"))
 app.use("/login", require("./routes/Login"))
-app.use("/submit", require("./routes/Submit"))
+app.use("/submit", auth, require("./routes/Submit"))
