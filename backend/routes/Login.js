@@ -11,8 +11,8 @@ router.post('/', async (req, res, next) => {
 		if(!user) return res.status(401).json({message: "Identifiant /Mot de passe invalide !"})
 		const isPasswordValid = await bcrypt.compare(password, user.password)
 		if(!isPasswordValid) return res.status(401).json({message: "Identifiant /Mot de passe invalide !"})
-		const accessToken = jwt.sign({username:user.username}, process.env.SECRET_KEY, { expiresIn: 60 * 60 })
-		res.status(201).json({message: "Connexion réussi", user: {username:user.username}, accessToken})
+		const accessToken = jwt.sign({username:user.username, isAdmin: user.isAdmin}, process.env.SECRET_KEY, { expiresIn: 60 * 60 })
+		res.status(201).json({message: "Connexion réussi", accessToken})
 		
 	} catch (error) {
 		console.log("Error : " , error)

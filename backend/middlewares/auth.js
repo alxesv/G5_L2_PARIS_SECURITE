@@ -11,10 +11,10 @@ exports.auth = (req, res, next) => {
 			if(err || !decoded){
 				return res.status(401).json({message: "Invalid token !"})
 			}
-            const {username} = decoded
+            const {username, isAdmin} = decoded
 		
         req.auth = {
-            username
+            username, isAdmin
         }
 		next()
     })

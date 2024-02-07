@@ -12,12 +12,6 @@ export default async function handler(req, res) {
     const result = await response.json();
     if (!response.ok)
       return res.status(401).json({ message: response.statusText });
-    setCookie("user", JSON.stringify(result.user), {
-      req,
-      res,
-      maxAge: 60 * 60 * 24 * 7, // 1 week
-      path: "/",
-    });
     setCookie("accessToken", result.accessToken, {
       req,
       res,
