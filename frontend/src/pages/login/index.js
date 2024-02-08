@@ -6,6 +6,7 @@ export default function Login() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [result, setResult] = React.useState({});
+  const [error, setError] = React.useState({});
   const router = useRouter();
 
   const handleSubmit = async (e) => {
@@ -21,22 +22,27 @@ export default function Login() {
       });
 
       const result = await response.json();
-      setResult(result);
+    
       if (!response.ok) {
-        return;
-      }
+        throw new Error(
+          result.error || "Erreur lors de la récupération des données",
+        );
+      }  
+      setResult(result);
       setUsername("");
       setPassword("");
       router.push("/");
     } catch (error) {
-      setResult(error);
+      setError(error);
     }
   };
   return (
     <main>
       <h1>Login</h1>
       <section>
-        <div>{result.message}</div>
+      <div>
+        {result.message || (error.message && `Error: ${error.message}`)}
+      </div>
         <form onSubmit={(e) => handleSubmit(e)}>
           <label htmlFor="login-name">Name</label>
           <br />

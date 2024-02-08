@@ -1,11 +1,10 @@
-import { useRouter } from "next/router";
 import React from "react";
 import Link from "next/link";
 
 export default function Identify() {
   const [mail, setMail] = React.useState("");
   const [result, setResult] = React.useState({});
-  const router = useRouter();
+  const [error, setError] = React.useState({});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,20 +19,24 @@ export default function Identify() {
       });
 
       const result = await response.json();
-      setResult(result);
       if (!response.ok) {
-        return;
-      }
+        throw new Error(
+          result.error || "Erreur lors de la récupération des données",
+        );
+      }  
+      setResult(result);
       setMail("");
     } catch (error) {
-      setResult(error);
+      setError(error);
     }
   };
   return (
     <main>
       <h1>Entrer votre mail</h1>
       <section>
-        <div>{result.message}</div>
+      <div>
+        {result.message || (error.message && `Error: ${error.message}`)}
+      </div>
         <form onSubmit={(e) => handleSubmit(e)}>
           <label htmlFor="identify-mail">E-mail</label>
           <br />
