@@ -1,9 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const mongoose = require("mongoose")
+const logger = require('../logger')
 const db = mongoose.connection
 
 router.post('/', async (req, res, next) => {
+	try {
 	let priv = false
 	const data = JSON.parse(req.body)
 	if (data.hasOwnProperty("isPrivate") && data.isPrivate === "on") {
@@ -20,8 +22,8 @@ router.post('/', async (req, res, next) => {
 	if (currentUser.allergies) {
 		for (let i = 0; i < currentUser.allergies.length; i++) {
 			if (currentUser.allergies[i].allergy === allergy.allergy) {
-				console.log("Allergy already exists")
-				res.send("Allergy already exists")
+				logger.info(`L'allergie ${allergy.allergy} a déjà été créer par l'utilisateur ${req.auth.username}.`)
+				res.status(200).json({message: "Cette allergie existe déjà !"})
 				alreadyExists = true
 				return
 			}
@@ -30,10 +32,15 @@ router.post('/', async (req, res, next) => {
 
 	if (!alreadyExists) {
 		await db.collection("users").updateOne({username:req.auth.username}, {$addToSet: {allergies: allergy}})
-		console.log("Allergy added")
+		logger.info(`Allergie ${allergy.allergy} ajouter à l'utilisateur ${req.auth.username}.`)
+
 	}
 
-	res.send("Submitted")
+	res.status(200).json({message: "Allergie ajoutée !"})
+} catch (error) {
+	logger.error(`Error : ${error.message}`)
+    res.status(500).json({message: error.message})	
+}
 })
 
 module.exports = router

@@ -1,3 +1,6 @@
+import Layout from "@/components/layout";
+import logout from "@/utils/logout";
+import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import React from "react";
 
@@ -8,6 +11,12 @@ export default function Register() {
   const [result, setResult] = React.useState({});
   const [error, setError] = React.useState({});
   const router = useRouter();
+  React.useEffect(() => {
+    const accessToken = getCookie("accessToken");
+    if (accessToken) {
+      logout();
+    }
+  }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -20,7 +29,7 @@ export default function Register() {
         body: JSON.stringify({ username, password, mail }),
       });
       const result = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(
           result.error || "Erreur lors de la récupération des données",
@@ -36,10 +45,10 @@ export default function Register() {
     }
   };
   return (
-    <main>
+    <Layout>
       <h1>Register</h1>
       <section>
-      <div>
+        <div>
           {result.message || (error.message && `Error: ${error.message}`)}
         </div>
         <form onSubmit={(e) => handleSubmit(e)}>
@@ -79,6 +88,6 @@ export default function Register() {
           <button type="submit">Valider</button>
         </form>
       </section>
-    </main>
+    </Layout>
   );
 }
