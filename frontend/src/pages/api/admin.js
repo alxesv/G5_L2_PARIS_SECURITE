@@ -4,7 +4,8 @@ export default async function handler(req, res) {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${req.cookies.accessToken}`,
         }
         })
     res.send(response)

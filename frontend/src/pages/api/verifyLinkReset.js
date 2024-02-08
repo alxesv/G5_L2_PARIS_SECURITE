@@ -1,16 +1,19 @@
 export default async function handler(req, res) {
   try {
-    const response = await fetch(process.env.backend_url + "/register", {
-      method: "POST",
+    const response = await fetch(process.env.backend_url + "/verifyLinkReset", {
+      method: "GET",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        Authorization: `Bearer ${req.query.token}`,
       },
-      body: JSON.stringify(req.body),
     });
     const result = await response.json();
-
     if (!response.ok) {
+      if (response.status === 401) {
+        const error = new Error("Le lien a expiré !");
+        throw error;
+      }
       const error = new Error(
         result.message ||
           "Erreur lors de la récupération des données depuis l'API",

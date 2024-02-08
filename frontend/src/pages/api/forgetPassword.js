@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   try {
-    const response = await fetch(process.env.backend_url + "/register", {
+    const response = await fetch(process.env.backend_url + "/forgetPassword", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -9,7 +9,6 @@ export default async function handler(req, res) {
       body: JSON.stringify(req.body),
     });
     const result = await response.json();
-
     if (!response.ok) {
       const error = new Error(
         result.message ||

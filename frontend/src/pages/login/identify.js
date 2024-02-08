@@ -1,23 +1,22 @@
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
+import Link from "next/link";
 
-export default function Login() {
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
+export default function Identify() {
+  const [mail, setMail] = React.useState("");
   const [result, setResult] = React.useState({});
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("/api/login", {
+      const response = await fetch("/api/forgetPassword", {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ mail }),
       });
 
       const result = await response.json();
@@ -25,43 +24,30 @@ export default function Login() {
       if (!response.ok) {
         return;
       }
-      setUsername("");
-      setPassword("");
-      router.push("/");
+      setMail("");
     } catch (error) {
       setResult(error);
     }
   };
   return (
     <main>
-      <h1>Login</h1>
+      <h1>Entrer votre mail</h1>
       <section>
         <div>{result.message}</div>
         <form onSubmit={(e) => handleSubmit(e)}>
-          <label htmlFor="login-name">Name</label>
+          <label htmlFor="identify-mail">E-mail</label>
           <br />
           <input
             type="text"
-            id="login-name"
-            value={username}
+            id="identify-mail"
+            value={mail}
             onChange={(e) => {
-              setUsername(e.target.value);
+              setMail(e.target.value);
             }}
           />
           <br />
-          <label htmlFor="name">Password</label>
-          <br />
-          <input
-            type="password"
-            id="login-password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-          />
-          <br />
-          <Link href="/login/identify">Mot de passe oublié ?</Link>
-          <br />
+
+          <Link href="/login">Revenir à la page de connexion</Link>
           <button type="submit">Valider</button>
         </form>
       </section>

@@ -1,15 +1,19 @@
 export default async function handler(req, res) {
   try {
-    const response = await fetch(process.env.backend_url + "/register", {
-      method: "POST",
+    const response = await fetch(process.env.backend_url + "/reset", {
+      method: "PATCH",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        Authorization: `Bearer ${req.query.token}`,
       },
       body: JSON.stringify(req.body),
     });
     const result = await response.json();
-
+    if (response.status === 401) {
+      const error = new Error("Le lien a expiré !");
+      throw error;
+    }
     if (!response.ok) {
       const error = new Error(
         result.message ||
