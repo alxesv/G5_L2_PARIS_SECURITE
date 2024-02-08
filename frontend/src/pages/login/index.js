@@ -1,3 +1,6 @@
+import Layout from "@/components/layout";
+import logout from "@/utils/logout";
+import { getCookie } from "cookies-next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -8,7 +11,12 @@ export default function Login() {
   const [result, setResult] = React.useState({});
   const [error, setError] = React.useState({});
   const router = useRouter();
-
+  React.useEffect(() => {
+    const accessToken = getCookie("accessToken");
+    if (accessToken) {
+      logout();
+    }
+  }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -22,12 +30,12 @@ export default function Login() {
       });
 
       const result = await response.json();
-    
+
       if (!response.ok) {
         throw new Error(
           result.error || "Erreur lors de la récupération des données",
         );
-      }  
+      }
       setResult(result);
       setUsername("");
       setPassword("");
@@ -37,12 +45,12 @@ export default function Login() {
     }
   };
   return (
-    <main>
+    <Layout>
       <h1>Login</h1>
       <section>
-      <div>
-        {result.message || (error.message && `Error: ${error.message}`)}
-      </div>
+        <div>
+          {result.message || (error.message && `Error: ${error.message}`)}
+        </div>
         <form onSubmit={(e) => handleSubmit(e)}>
           <label htmlFor="login-name">Name</label>
           <br />
@@ -71,6 +79,6 @@ export default function Login() {
           <button type="submit">Valider</button>
         </form>
       </section>
-    </main>
+    </Layout>
   );
 }

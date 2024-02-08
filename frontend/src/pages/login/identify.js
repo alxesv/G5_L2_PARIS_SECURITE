@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Layout from "@/components/layout";
 
 export default function Identify() {
   const [mail, setMail] = React.useState("");
@@ -31,7 +32,7 @@ export default function Identify() {
     }
   };
   return (
-    <main>
+    <Layout>
       <h1>Entrer votre mail</h1>
       <section>
       <div>
@@ -54,6 +55,6 @@ export default function Identify() {
           <button type="submit">Valider</button>
         </form>
       </section>
-    </main>
+    </Layout>
   );
 }
