@@ -5,11 +5,18 @@ const router = express.Router()
 
 router.post("/", async (req, res, next) => {
 	try {
-		const { password, username } = req.body
+		const { password, username, mail } = req.body
+		const user = await  User.findOne({
+			mail
+		})
+		if(user) return res.status(401).json({
+			message: "L'utilisateur existe déjà !"
+		})
 		const hashedPassword = await bcrypt.hash(password, 10)
 		const userCreated = await User.create({
 			username,
-			password: hashedPassword
+			password: hashedPassword,
+			mail: mail
 		})
 		if (!userCreated) {
 			res.status(404).json({

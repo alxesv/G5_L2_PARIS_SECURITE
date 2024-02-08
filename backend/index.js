@@ -23,6 +23,9 @@ app.listen(port, () => {
 
 app.use("/register", require("./routes/Register"))
 app.use("/login", require("./routes/Login"))
+app.use("/forgetPassword", require("./routes/ForgetPassword.js"))
+app.use("/reset",auth, require("./routes/Reset.js"))
+app.use("/verifyLinkReset",auth, require("./routes/verifyLinkReset.js"))
 app.use("/submit", require("./routes/Submit"))
 app.use("/users", require("./routes/Users.js"))
 app.use("/remove", require("./routes/Remove.js"))
