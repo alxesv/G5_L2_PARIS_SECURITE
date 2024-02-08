@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
     const data = req.body
-    const response = await fetch('http://localhost:3000/submit', {
+    const response = await fetch('http://backend:3000/submit', {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {

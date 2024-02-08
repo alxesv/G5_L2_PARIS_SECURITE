@@ -6,6 +6,8 @@ const port = 3000
 const mongoose = require("mongoose")
 const { auth } = require("./middlewares/auth")
 
+console.log('MongoDB URI:', process.env.MONGO_URI);
+
 mongoose
 	.connect(process.env.MONGO_URI)
 	.then(() => console.log("Connected to mongodb !"))

@@ -1,7 +1,7 @@
 import { setCookie } from "cookies-next";
 export default async function handler(req, res) {
   try {
-    const response = await fetch("http://localhost:3000/login", {
+    const response = await fetch("http://backend:3000/login", {
       method: "POST",
       headers: {
         Accept: "application/json",
