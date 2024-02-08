@@ -49,12 +49,12 @@ export default function Reset() {
         body: JSON.stringify({ password }),
       });
       const result = await response.json();
-      setResult(result);
       if (!response.ok) {
         throw new Error(
           result.error || "Erreur lors de la récupération des données",
         );
       }
+      setResult(result);
       setIsUpdated(true);
       setPassword("");
     } catch (error) {

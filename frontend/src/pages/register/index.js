@@ -6,6 +6,7 @@ export default function Register() {
   const [password, setPassword] = React.useState("");
   const [mail, setMail] = React.useState("");
   const [result, setResult] = React.useState({});
+  const [error, setError] = React.useState({});
   const router = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,23 +20,28 @@ export default function Register() {
         body: JSON.stringify({ username, password, mail }),
       });
       const result = await response.json();
-      setResult(result);
+      
       if (!response.ok) {
-        return;
+        throw new Error(
+          result.error || "Erreur lors de la récupération des données",
+        );
       }
+      setResult(result);
       setUsername("");
       setPassword("");
       setMail("");
       router.push("/login");
     } catch (error) {
-      setResult(error);
+      setError(error);
     }
   };
   return (
     <main>
       <h1>Register</h1>
       <section>
-        <div>{result.message}</div>
+      <div>
+          {result.message || (error.message && `Error: ${error.message}`)}
+        </div>
         <form onSubmit={(e) => handleSubmit(e)}>
           <label htmlFor="register-name">Name</label>
           <br />

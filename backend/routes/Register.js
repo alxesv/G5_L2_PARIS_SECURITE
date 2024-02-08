@@ -1,14 +1,13 @@
 const express = require("express")
 const bcrypt = require("bcrypt")
 const User = require("../models/user")
+const logger = require("../logger")
 const router = express.Router()
 
 router.post("/", async (req, res, next) => {
 	try {
 		const { password, username, mail } = req.body
-		const user = await  User.findOne({
-			mail
-		})
+		const user = await  User.findOne().or([{mail}, {username}])
 		if(user) return res.status(401).json({
 			message: "L'utilisateur existe déjà !"
 		})
@@ -27,8 +26,9 @@ router.post("/", async (req, res, next) => {
 			message: "Inscription réussi",
 			user: {username:userCreated.username}
 		})
+		logger.info(`${userCreated.username} s'est inscrit.`)
 	} catch (error) {
-		console.log("Error : ", error.message)
+		logger.error(`Error : ${error.message}`)
 		res.status(500).json({ message: error.message })
 	}
 })
