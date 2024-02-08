@@ -1,12 +1,26 @@
 # G5_L2_PARIS_SECURITE
 
-To run with docker
+Create a .env file : 
+
+```bash
+    cd backend/
+    touch .env
+```
+
+Edit .env file with docker's container url : 
+```bash
+    MONGO_URI=mongodb://mongodb/allergies
+    backend_url=http://backend:3000
+    frontend_url=http://frontend:3000
+```
+
+To run app with docker :
 
 ```bash
     docker compose up -d
 ```
 
-To stop docker :
+To stop docker container:
 
 ```bash
     docker compose down
@@ -14,13 +28,13 @@ To stop docker :
 
 For local development :
 
-To run front:
+To run frontend only :
 ```bash
     cd frontend/
     npm run dev
 ```
 
-To run back :
+To run backend only :
 ```bash 
     cd backend/
     node index.js
