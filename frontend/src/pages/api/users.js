@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
     if (req.method === 'GET') {
-        const response = await fetch('http://localhost:3000/users', {
+        const response = await fetch('http://backend:3000/users', {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
             let username = req.body.username;
             params.body = JSON.stringify({ username: username });
         }
-        const response = await fetch('http://localhost:3000/users', params)
+        const response = await fetch('http://backend:3000/users', params)
         const data = await response.json()
         res.send(data)
     }

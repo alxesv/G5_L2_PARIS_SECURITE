@@ -18,7 +18,7 @@ services:
     ports:
       - "3000:3000"
     env_file:
-      - ./backend/.env
+      - ./.env
 
   frontend:
     build:
@@ -28,6 +28,8 @@ services:
       - backend
     ports:
       - "8000:8000"
+    env_file:
+      - ./.env
 
 volumes:
   config-vol:
