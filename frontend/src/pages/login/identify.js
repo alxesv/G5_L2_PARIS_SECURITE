@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import React from "react";
+import Link from "next/link";
 
 export default function Identify() {
   const [mail, setMail] = React.useState("");
@@ -24,7 +25,6 @@ export default function Identify() {
         return;
       }
       setMail("");
-    
     } catch (error) {
       setResult(error);
     }
@@ -39,14 +39,15 @@ export default function Identify() {
           <br />
           <input
             type="text"
-            id="identify-mail" value={mail}
+            id="identify-mail"
+            value={mail}
             onChange={(e) => {
               setMail(e.target.value);
             }}
           />
           <br />
-     
-          <a href="/login">Revenir à la page de connexion</a>
+
+          <Link href="/login">Revenir à la page de connexion</Link>
           <button type="submit">Valider</button>
         </form>
       </section>

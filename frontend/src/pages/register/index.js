@@ -16,7 +16,7 @@ export default function Register() {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password , mail }),
+        body: JSON.stringify({ username, password, mail }),
       });
       const result = await response.json();
       setResult(result);
@@ -25,7 +25,7 @@ export default function Register() {
       }
       setUsername("");
       setPassword("");
-      setMail("")
+      setMail("");
       router.push("/login");
     } catch (error) {
       setResult(error);
@@ -52,7 +52,8 @@ export default function Register() {
           <br />
           <input
             type="text"
-            id="register-mail" value={mail}
+            id="register-mail"
+            value={mail}
             onChange={(e) => {
               setMail(e.target.value);
             }}

@@ -1,4 +1,4 @@
-import { setCookie } from "cookies-next";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 
@@ -42,7 +42,8 @@ export default function Login() {
           <br />
           <input
             type="text"
-            id="login-name" value={username}
+            id="login-name"
+            value={username}
             onChange={(e) => {
               setUsername(e.target.value);
             }}
@@ -59,7 +60,7 @@ export default function Login() {
             }}
           />
           <br />
-          <a href="/login/identify">Mot de passe oublié ?</a>
+          <Link href="/login/identify">Mot de passe oublié ?</Link>
           <br />
           <button type="submit">Valider</button>
         </form>
