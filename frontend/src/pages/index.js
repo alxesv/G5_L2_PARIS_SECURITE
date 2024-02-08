@@ -22,6 +22,9 @@ export default function Home() {
                     user.allergies = user.allergies.filter((a) => a.allergy !== allergy.allergy)
                 }
             }
+            if(!user.allergies || user.allergies.length === 0) {
+                data = data.filter((u) => u.username !== user.username)
+            }
            }
         }
         setUsers(data)
