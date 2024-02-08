@@ -1,7 +1,7 @@
 import { setCookie } from "cookies-next";
 export default async function handler(req, res) {
   try {
-    const response = await fetch(process.env.backend_url + '/register', {
+    const response = await fetch(process.env.backend_url + '/login', {
       method: "POST",
       headers: {
         Accept: "application/json",

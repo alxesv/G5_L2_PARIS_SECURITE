@@ -4,14 +4,14 @@ const mongoose = require("mongoose")
 const db = mongoose.connection
 
 router.post('/', async (req, res, next) => {
-	let private = false
+	let priv = false
 	const data = JSON.parse(req.body)
 	if (data.hasOwnProperty("isPrivate") && data.isPrivate === "on") {
-		private = true
+		priv = true
 	}
 	const allergy = {
 		allergy: data.allergy,
-		isPrivate: private
+		isPrivate: priv
 	}
 
 	const currentUser = await db.collection("users").findOne({username: req.auth.username})
