@@ -4,6 +4,7 @@ import React from "react";
 export default function Register() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [mail, setMail] = React.useState("");
   const [result, setResult] = React.useState({});
   const router = useRouter();
   const handleSubmit = async (e) => {
@@ -15,7 +16,7 @@ export default function Register() {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password, mail }),
       });
       const result = await response.json();
       setResult(result);
@@ -24,6 +25,7 @@ export default function Register() {
       }
       setUsername("");
       setPassword("");
+      setMail("");
       router.push("/login");
     } catch (error) {
       setResult(error);
@@ -46,8 +48,18 @@ export default function Register() {
             }}
           />
           <br />
-
-          <label htmlFor="name">Password</label>
+          <label htmlFor="register-mail">E-mail</label>
+          <br />
+          <input
+            type="text"
+            id="register-mail"
+            value={mail}
+            onChange={(e) => {
+              setMail(e.target.value);
+            }}
+          />
+          <br />
+          <label htmlFor="register-password">Password</label>
           <br />
           <input
             type="password"

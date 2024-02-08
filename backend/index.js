@@ -6,7 +6,6 @@ const port = 3000
 const mongoose = require("mongoose")
 const { auth } = require("./middlewares/auth")
 
-console.log('MongoDB URI:', process.env.MONGO_URI);
 
 mongoose
 	.connect(process.env.MONGO_URI)
@@ -23,7 +22,10 @@ app.listen(port, () => {
 
 app.use("/register", require("./routes/Register"))
 app.use("/login", require("./routes/Login"))
-app.use("/submit", require("./routes/Submit"))
-app.use("/users", require("./routes/Users.js"))
-app.use("/remove", require("./routes/Remove.js"))
-app.use('/admin', require('./routes/Admin.js'))
+app.use("/forgetPassword", require("./routes/ForgetPassword.js"))
+app.use("/reset",auth, require("./routes/Reset.js"))
+app.use("/verifyLinkReset",auth, require("./routes/verifyLinkReset.js"))
+app.use("/submit", auth,require("./routes/Submit"))
+app.use("/users",auth, require("./routes/Users.js"))
+app.use("/remove",auth, require("./routes/Remove.js"))
+app.use('/admin',auth, require('./routes/Admin.js'))
