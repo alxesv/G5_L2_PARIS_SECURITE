@@ -3,7 +3,9 @@ export default async function handler(req, res) {
         const response = await fetch(process.env.backend_url + '/users', {
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${req.cookies.accessToken}`,
+
             }
         })
         const data = await response.json()
