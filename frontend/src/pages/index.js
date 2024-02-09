@@ -41,7 +41,7 @@ export default function Home() {
             if(!user.allergies || user.allergies.length === 0) {
                 data = data.filter((u) => u.username !== user.username)
             }
-           }
+          }
         }
       }
       setUsers(data);

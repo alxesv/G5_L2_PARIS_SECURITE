@@ -74,6 +74,7 @@ export default function Reset() {
       }
     }
   };
+  console.log(isExpired);
   return (
     <main>
       {isExpired ? (
