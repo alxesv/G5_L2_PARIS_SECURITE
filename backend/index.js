@@ -8,15 +8,6 @@ const { auth } = require("./middlewares/auth")
 const helmet = require("helmet");
 
 app.use(helmet())
-// app.use(
-// 	helmet.contentSecurityPolicy({
-// 	  directives: {
-// 		defaultSrc: ["'self'"],
-// 		scriptSrc: ["'self'", 'http://localhost:8000'],
-// 		// Add other directives as needed
-// 	  },
-// 	})
-//   );
 
 mongoose
 	.connect(process.env.MONGO_URI)
