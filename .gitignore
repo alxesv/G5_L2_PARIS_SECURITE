@@ -25,4 +25,5 @@ package-lock.json
 .vscode
 
 # logs files
-/backend/logs/*
+/backend/logs/errors.log
+/backend/logs/infos.log
