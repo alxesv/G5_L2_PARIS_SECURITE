@@ -2,9 +2,13 @@ const express = require('express')
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const logger = require('../logger')
+const { body } = require('express-validator')
+const { verifyInputs } = require('../middlewares/verifyInputs')
 const router = express.Router()
-
-router.patch('/', async (req, res, next) => {
+const validateInputs = [
+	body('password').trim().isLength({ min: 8 }).matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,}$/),
+  ];
+router.patch('/', validateInputs, verifyInputs, async (req, res, next) => {
 	try {
 		const {username} = req.auth
 		const {password} = req.body

@@ -3,9 +3,15 @@ const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const logger = require('../logger')
+const { body } = require('express-validator')
+const { verifyInputs } = require('../middlewares/verifyInputs')
 const router = express.Router()
-
-router.post('/', async (req, res, next) => {
+const validateInputs = [
+	body('username').trim().isLength({ min: 2 }).escape(),
+	body('password').trim().isLength({ min: 2 }).escape(),
+  
+  ];
+router.post('/',validateInputs, verifyInputs, async (req, res, next) => {
 	try {
 		const {password, username} = req.body
 		const user = await User.findOne({username})

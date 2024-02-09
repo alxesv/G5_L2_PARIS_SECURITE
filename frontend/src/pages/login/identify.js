@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Layout from "@/components/layout";
+import { sanitizeEmail } from "@/utils/verification";
 
 export default function Identify() {
   const [mail, setMail] = React.useState("");
@@ -10,13 +11,14 @@ export default function Identify() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const sanitizedEmail = sanitizeEmail(mail)
       const response = await fetch("/api/forgetPassword", {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ mail }),
+        body: JSON.stringify({ mail: sanitizedEmail }),
       });
 
       const result = await response.json();

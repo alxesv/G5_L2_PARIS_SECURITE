@@ -3,6 +3,7 @@ import { getCurrentUser } from "@/utils/getCurrentUser";
 import useRedirectTo from "@/utils/redirect";
 import { useRouter } from "next/router";
 import Layout from "@/components/layout";
+import { sanitizeString } from "@/utils/verification";
 
 export default function MyAllergies() {
   const [allergies, setAllergies] = useState([]);
@@ -26,7 +27,7 @@ export default function MyAllergies() {
       }
       const response = await fetch("/api/users", {
         method: "POST",
-        body: JSON.stringify({ username: getCurrentUser(name)?.username }),
+        body: JSON.stringify({ username: sanitizeString(getCurrentUser(name)?.username, "Nom") }),
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -59,7 +60,7 @@ export default function MyAllergies() {
       const response = await fetch("/api/remove", {
         method: "POST",
         body: JSON.stringify({
-          username: getCurrentUser(name)?.username,
+          username: sanitizeString(getCurrentUser(name)?.username, "Nom"),
           allergy: allergy,
         }),
         headers: {
@@ -96,7 +97,8 @@ export default function MyAllergies() {
               {allergy.allergy} {allergy.isPrivate ? "Private" : "Public"}{" "}
               <button
                 onClick={() => {
-                  handleRemove(allergy.allergy);
+                  const sanitizedString = sanitizeString(allergy.allergy, "Allergie")
+                  handleRemove(sanitizedString);
                 }}
               >
                 X

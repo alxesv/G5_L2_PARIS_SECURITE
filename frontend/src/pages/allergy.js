@@ -1,5 +1,6 @@
 import Layout from "@/components/layout";
 import useRedirectTo from "@/utils/redirect";
+import { sanitizeString } from "@/utils/verification";
 import React from "react";
 
 export default function Allergy() {
@@ -21,9 +22,10 @@ export default function Allergy() {
       data.forEach((value, key) => {
         formData[key] = value;
       });
+      const sanitizedString =  sanitizeString(formData.allergy, "Allergie")
       const response = await fetch("/api/submit", {
         method: "POST",
-        body: JSON.stringify(formData),
+        body: JSON.stringify({...formData, allergy: sanitizedString}),
       });
       const result = await response.json();
       if (!response.ok) {
@@ -56,15 +58,3 @@ export default function Allergy() {
   );
 }
 
-export async function getServerSideProps(context) {
-  const { req, res } = context;
-  if (!req.cookies.accessToken) {
-    // Redirigez l'utilisateur vers une page d'erreur ou une page de connexion
-    res.writeHead(302, { Location: "/login" });
-    res.end();
-    return { props: {} };
-  }
-  return {
-    props: {}, // Les propriétés de la page
-  };
-}

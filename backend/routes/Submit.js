@@ -2,12 +2,18 @@ const express = require('express')
 const router = express.Router()
 const mongoose = require("mongoose")
 const logger = require('../logger')
+const { body } = require('express-validator')
+const { verifyInputs } = require('../middlewares/verifyInputs')
 const db = mongoose.connection
+const validateInputs = [
+	body('isPrivate').optional().trim().isLength({ min: 2 }).escape(),
+	body('username').trim().isLength({ min: 2 }).escape(),
+  ];
 
-router.post('/', async (req, res, next) => {
+router.post('/', validateInputs, verifyInputs, async (req, res, next) => {
 	try {
 	let priv = false
-	const data = JSON.parse(req.body)
+	const data =req.body
 	if (data.hasOwnProperty("isPrivate") && data.isPrivate === "on") {
 		priv = true
 	}
@@ -15,7 +21,6 @@ router.post('/', async (req, res, next) => {
 		allergy: data.allergy,
 		isPrivate: priv
 	}
-
 	const currentUser = await db.collection("users").findOne({username: req.auth.username})
 	let alreadyExists = false
     
@@ -23,9 +28,8 @@ router.post('/', async (req, res, next) => {
 		for (let i = 0; i < currentUser.allergies.length; i++) {
 			if (currentUser.allergies[i].allergy === allergy.allergy) {
 				logger.info(`L'allergie ${allergy.allergy} a déjà été créer par l'utilisateur ${req.auth.username}.`)
-				res.status(200).json({message: "Cette allergie existe déjà !"})
 				alreadyExists = true
-				return
+				return res.status(200).json({message: "Cette allergie existe déjà !"})
 			}
 		}
 	}

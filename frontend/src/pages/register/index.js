@@ -1,5 +1,6 @@
 import Layout from "@/components/layout";
 import logout from "@/utils/logout";
+import { sanitizeEmail, sanitizePassword, sanitizeString } from "@/utils/verification";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import React from "react";
@@ -20,13 +21,17 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const sanitizedString = sanitizeString(username, "Nom")
+      const sanitizedEmail =sanitizeEmail(mail)
+      const sanitizedPassword = sanitizePassword(password)
+      
       const response = await fetch("/api/register", {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password, mail }),
+        body: JSON.stringify({ username: sanitizedString, password: sanitizedPassword, mail: sanitizedEmail }),
       });
       const result = await response.json();
 

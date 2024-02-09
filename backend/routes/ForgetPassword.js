@@ -4,8 +4,12 @@ const jwt = require('jsonwebtoken')
 const router = express.Router()
 const nodemailer = require("nodemailer")
 const logger = require('../logger')
-
-router.post('/', async (req, res, next) => {
+const { body } = require('express-validator')
+const { verifyInputs } = require('../middlewares/verifyInputs')
+const validateInputs = [
+	body('mail').trim().isEmail().normalizeEmail()
+  ];
+router.post('/', validateInputs, verifyInputs, async (req, res, next) => {
 	try {
 		const {mail} = req.body
 		const user = await User.findOne({mail})

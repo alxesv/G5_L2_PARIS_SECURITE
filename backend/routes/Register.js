@@ -2,9 +2,17 @@ const express = require("express")
 const bcrypt = require("bcrypt")
 const User = require("../models/user")
 const logger = require("../logger")
+const { body } = require("express-validator")
+const { verifyInputs } = require("../middlewares/verifyInputs")
 const router = express.Router()
-
-router.post("/", async (req, res, next) => {
+const validateInputs = [
+	body('username').trim().isLength({ min: 2 }).escape(),
+	
+	body('password').trim().isLength({ min: 8 }).matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,}$/),
+  
+	body('mail').trim().isEmail().normalizeEmail()
+  ];
+router.post("/",validateInputs,verifyInputs, async (req, res, next) => {
 	try {
 		const { password, username, mail } = req.body
 		const user = await  User.findOne().or([{mail}, {username}])

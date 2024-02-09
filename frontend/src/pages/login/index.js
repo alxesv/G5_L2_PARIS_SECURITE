@@ -1,5 +1,6 @@
 import Layout from "@/components/layout";
 import logout from "@/utils/logout";
+import {  sanitizeString } from "@/utils/verification";
 import { getCookie } from "cookies-next";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -20,13 +21,15 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const sanitizedString = sanitizeString(username, "Nom")
+      const sanitizedPassword =sanitizeString(password, "Mot de passe")
       const response = await fetch("/api/login", {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username: sanitizedString, password : sanitizedPassword}),
       });
 
       const result = await response.json();

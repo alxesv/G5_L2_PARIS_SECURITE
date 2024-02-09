@@ -3,9 +3,13 @@ const router = express.Router()
 const mongoose = require("mongoose")
 const logger = require('../logger')
 const { auth } = require('../middlewares/auth')
+const { body } = require('express-validator')
+const { verifyInputs } = require('../middlewares/verifyInputs')
 const db = mongoose.connection
-
-router.post('/', auth,async (req, res, next) => {
+const validateInputs = [
+	body('username').trim().isLength({ min: 2 }).escape(),
+  ];
+router.post('/', auth, validateInputs, verifyInputs, async (req, res, next) => {
     try {
     if(req.body.username) {
         const user = await db.collection("users").findOne({username
