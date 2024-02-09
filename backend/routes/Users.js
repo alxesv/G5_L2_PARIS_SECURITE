@@ -9,7 +9,7 @@ const db = mongoose.connection
 
 router.get('/', async (req, res, next) => {
     try {
-    const users = await db.collection("users").find().toArray()
+    const users = await db.collection("users").find({},).project({ _id:0,password: 0, resetPasswordExpires:0, __v:0, mail:0 }).toArray()
     logger.info(`Récupération des infos de tous les utilisateurs`)
     res.status(200).json(users)
 } catch (error) {
