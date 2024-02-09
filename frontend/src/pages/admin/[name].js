@@ -74,7 +74,6 @@ export default function Page() {
     reset();
     try {
       const data = new FormData(event.target);
-      data.forEach((value,key ) => console.log(key, value))
       const response = await fetch("/api/admin", {
         method: "POST",
         body: JSON.stringify({ username: sanitizeString(name, "Nom")}),

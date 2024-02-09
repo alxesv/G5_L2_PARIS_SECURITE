@@ -2,10 +2,9 @@ import { sanitizeString } from "@/utils/verification";
 import validator from "validator";
 
 export default async function handler(req, res) {
-
     try {
-    const accessToken = validator.isJWT(req.cookies.accessToken) && req.cookies.accessToken
-    if (req.method === 'GET') {
+        const accessToken =req.cookies.accessToken && validator.isJWT(req.cookies.accessToken) && req.cookies.accessToken
+        if (req.method === 'GET') {
     
         const response = await fetch(process.env.backend_url + '/users', {
             headers: {
@@ -44,7 +43,7 @@ export default async function handler(req, res) {
 
             params.body = JSON.stringify({ username: sanitizedUsername });
         }
-        const response = await fetch(process.env.backend_url + '/users', params)
+        const response = await fetch(process.env.backend_url + '/user', params)
         const data = await response.json()
         if (!response.ok) {
             const error = new Error(

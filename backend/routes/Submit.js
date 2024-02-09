@@ -7,7 +7,7 @@ const { verifyInputs } = require('../middlewares/verifyInputs')
 const db = mongoose.connection
 const validateInputs = [
 	body('isPrivate').optional().trim().isLength({ min: 2 }).escape(),
-	body('username').trim().isLength({ min: 2 }).escape(),
+	body('allergy').trim().isLength({ min: 2 }).escape(),
   ];
 
 router.post('/', validateInputs, verifyInputs, async (req, res, next) => {
