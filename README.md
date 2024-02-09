@@ -2,7 +2,7 @@
 
 ## Docker Deployement
 
-Create a .env file : 
+Create a .env file in backend: 
 
 ```bash
     cd backend/
@@ -12,8 +12,20 @@ Create a .env file :
 Edit .env file with docker's container url : 
 ```bash
     MONGO_URI=mongodb://mongodb/allergies
+    EMAIL_ADDRESS="email expéditeur"
+    EMAIL_PASSWORD="mot de passe expéditeur"
+    SECRET_KEY="clé aléatoire"
+```
+Create a .env file in frontend: 
+
+```bash
+    cd frontend/
+    touch .env
+```
+
+Edit .env file with docker's container url : 
+```bash
     backend_url=http://backend:3000
-    frontend_url=http://frontend:3000
 ```
 
 To run app with docker at repo's root :
