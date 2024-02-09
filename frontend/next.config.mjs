@@ -24,8 +24,10 @@ const headersConfig = {
   ],
 };
 
-export default {
+const nextConfig  = {
   async headers() {
     return [headersConfig];
   },
 };
+
+export default nextConfig;
