@@ -1,13 +1,19 @@
+import { sanitizeString } from "@/utils/verification";
+import validator from "validator";
 
 export default async function handler(req, res) {
     try {    
-    const data = req.body
+    const {allergy, username} = req.body
+    const sanitizedUsername =  sanitizeString(username, 'Nom')
+    const sanitizedAllergy =  sanitizeString(allergy, 'Allergie')
+    const accessToken = validator.isJWT(req.cookies.accessToken) && req.cookies.accessToken
+
     const response = await fetch(process.env.backend_url + '/remove', {
         method: 'POST',
-        body: JSON.stringify(data),
+        body: JSON.stringify({username:sanitizedUsername, allergy: sanitizedAllergy}),
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${req.cookies.accessToken}`
+            Authorization: `Bearer ${accessToken}`
         }
         })
     const result = await response.json();

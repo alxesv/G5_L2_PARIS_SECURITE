@@ -3,6 +3,8 @@ const router = express.Router()
 const mongoose = require("mongoose")
 const logger = require('../logger')
 const { auth } = require('../middlewares/auth')
+const { body } = require('express-validator')
+const { verifyInputs } = require('../middlewares/verifyInputs')
 const db = mongoose.connection
 
 router.get('/', async (req, res, next) => {

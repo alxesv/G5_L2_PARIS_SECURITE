@@ -3,6 +3,7 @@ import useRedirectTo from "@/utils/redirect";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import {  sanitizeString } from "@/utils/verification";
 
 export default function Page() {
   const router = useRouter();
@@ -23,7 +24,7 @@ export default function Page() {
     try {
       const response = await fetch("/api/users", {
         method: "POST",
-        body: JSON.stringify({ username: name }),
+        body: JSON.stringify({ username: sanitizeString(name, "Nom") }),
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -48,7 +49,7 @@ export default function Page() {
       reset();
       const response = await fetch("/api/remove", {
         method: "POST",
-        body: JSON.stringify({ username: name, allergy: allergy }),
+        body: JSON.stringify({ username: sanitizeString(name, "Nom"), allergy: allergy }),
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -73,9 +74,10 @@ export default function Page() {
     reset();
     try {
       const data = new FormData(event.target);
+      data.forEach((value,key ) => console.log(key, value))
       const response = await fetch("/api/admin", {
         method: "POST",
-        body: JSON.stringify({ username: name, isAdmin: data.get("isAdmin") }),
+        body: JSON.stringify({ username: sanitizeString(name, "Nom")}),
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -124,7 +126,8 @@ export default function Page() {
                 {allergy.allergy} {allergy.isPrivate ? "Private" : "Public"}{" "}
                 <button
                   onClick={() => {
-                    handleRemove(allergy.allergy);
+                  sanitizeString(allergy.allergy, "Allergie")
+                  handleRemove(allergy.allergy);
                   }}
                 >
                   X

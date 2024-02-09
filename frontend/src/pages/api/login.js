@@ -1,13 +1,17 @@
+import {  sanitizeString } from "@/utils/verification";
 import { setCookie } from "cookies-next";
 export default async function handler(req, res) {
   try {
+    const {username, password} = req.body
+    const sanitizedPassword = sanitizeString(password, "Mot de passe")
+    const sanitizedUsername =  sanitizeString(username, 'Nom')
     const response = await fetch(process.env.backend_url + "/login", {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(req.body),
+      body: JSON.stringify({username: sanitizedUsername, password: sanitizedPassword }),
     });
     const result = await response.json();
     if (!response.ok) {

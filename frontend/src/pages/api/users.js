@@ -1,14 +1,17 @@
+import validator from "validator";
 
 export default async function handler(req, res) {
 
     try {
+    const accessToken = validator.isJWT(req.cookies.accessToken) && req.cookies.accessToken
+
     if (req.method === 'GET') {
     
         const response = await fetch(process.env.backend_url + '/users', {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${req.cookies.accessToken}`,
+                Authorization: `Bearer ${accessToken}`,
 
             }
         })
@@ -31,13 +34,15 @@ export default async function handler(req, res) {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${req.cookies.accessToken}`,
+                Authorization: `Bearer ${accessToken}`,
 
             }
         }
         if (req.body.username) {
             let username = req.body.username;
-            params.body = JSON.stringify({ username: username });
+                const sanitizedUsername =  sanitizeString(username, 'Nom')
+
+            params.body = JSON.stringify({ username: sanitizedUsername });
         }
         const response = await fetch(process.env.backend_url + '/users', params)
         const data = await response.json()
