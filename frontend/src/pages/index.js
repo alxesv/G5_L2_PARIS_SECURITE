@@ -5,6 +5,7 @@ export default function Home() {
 
     const [users, setUsers] = useState([])
 
+    
     async function fetchUsers() {
         const response = await fetch('/api/users', {
             headers: {
