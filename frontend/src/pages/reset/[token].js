@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import React from "react";
 import Link from "next/link";
+import { sanitizePassword } from "@/utils/verification";
 
 export default function Reset() {
   const [password, setPassword] = React.useState("");
@@ -9,29 +10,33 @@ export default function Reset() {
   const [isExpired, setIsExpired] = React.useState(false);
   const [isUpdated, setIsUpdated] = React.useState(false);
   const router = useRouter();
-
+  const fetchUseEffect = async() =>{
+    try {
+      const response =await fetch("/api/verifyLinkReset?token=" + router.query.token)
+      const result = await response.json();
+      if (!response.ok) {
+        const error =  new Error(
+          result.error || "Erreur lors de la récupération des données",
+        );
+        error.status = response.status
+        throw error
+      }
+    } catch (error) {
+      if (error.status === 401 || error.status === 403) {
+        setIsExpired(true);
+      } else {
+        setError(error);
+      }
+    }
+  }
   React.useEffect(() => {
     if (router.query.token) {
-      fetch("/api/verifyLinkReset?token=" + router.query.token)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(
-              response.error || "Erreur lors de la récupération des données",
-            );
-          }
-        })
-        .catch((error) => {
-          if (error.status === 401 || error.status === 403) {
-            setIsExpired(true);
-          } else {
-            setError(error);
-          }
-        });
+      fetchUseEffect()
     }
     return () => {
       setPassword("");
       setIsUpdated(false);
-      setIsExpired(false);
+  
     };
   }, [router.query.token]);
   const handleSubmit = async (e) => {
@@ -40,21 +45,24 @@ export default function Reset() {
     setError({});
     setResult({});
     try {
+      const sanitizedPassword = sanitizePassword(password)
       const response = await fetch("/api/reset?token=" + router.query.token, {
         method: "PATCH",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ password: sanitizedPassword }),
       });
       const result = await response.json();
-      setResult(result);
       if (!response.ok) {
-        throw new Error(
+        const error =  new Error(
           result.error || "Erreur lors de la récupération des données",
         );
+        error.status = response.status
+        throw error
       }
+      setResult(result);
       setIsUpdated(true);
       setPassword("");
     } catch (error) {
@@ -66,6 +74,7 @@ export default function Reset() {
       }
     }
   };
+  console.log(isExpired);
   return (
     <main>
       {isExpired ? (

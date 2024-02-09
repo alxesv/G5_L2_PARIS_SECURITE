@@ -23,3 +23,7 @@ package-lock.json
 .LSOverride
 
 .vscode
+
+# logs files
+/backend/logs/errors.log
+/backend/logs/infos.log

@@ -3,8 +3,13 @@ const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 const router = express.Router()
 const nodemailer = require("nodemailer")
-
-router.post('/', async (req, res, next) => {
+const logger = require('../logger')
+const { body } = require('express-validator')
+const { verifyInputs } = require('../middlewares/verifyInputs')
+const validateInputs = [
+	body('mail').trim().isEmail().normalizeEmail()
+  ];
+router.post('/', validateInputs, verifyInputs, async (req, res, next) => {
 	try {
 		const {mail} = req.body
 		const user = await User.findOne({mail})
@@ -13,7 +18,7 @@ router.post('/', async (req, res, next) => {
 		await  User.updateOne({mail},{
 			resetPasswordExpires: Date.now() + 3600000,
 		})
-
+		logger.info(`${user.username} mis à jour`)
 		const transporter = nodemailer.createTransport({
 			service: 'gmail',
 			host: "smtp.gmail.com",
@@ -32,11 +37,11 @@ router.post('/', async (req, res, next) => {
               + `http://localhost:8000/reset/${token}\n\n`
               + 'If you did not request this, please ignore this email and your password will remain unchanged.\n',
 		}
-  
+		logger.info(`Mail envoyé à ${user.mail}`)
   
 		transporter.sendMail(mailOptions, (err, response) => {
 			if (err) {
-				console.error('Error: ', err)
+				logger.error(`Error : ${err.message}`)
 			} else {
 				res.status(200).json({message:'Email de réinitialisation envoyé'})
 			}
@@ -44,7 +49,7 @@ router.post('/', async (req, res, next) => {
         
 		
 	} catch (error) {
-		console.log("Error : " , error)
+		logger.error(`Error : ${error.message}`)
 		res.status(500).json({message: error.message})
 	}
 })

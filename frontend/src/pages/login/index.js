@@ -1,3 +1,7 @@
+import Layout from "@/components/layout";
+import logout from "@/utils/logout";
+import {  sanitizeString } from "@/utils/verification";
+import { getCookie } from "cookies-next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -6,37 +10,50 @@ export default function Login() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [result, setResult] = React.useState({});
+  const [error, setError] = React.useState({});
   const router = useRouter();
-
+  React.useEffect(() => {
+    const accessToken = getCookie("accessToken");
+    if (accessToken) {
+      logout();
+    }
+  }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const sanitizedString = sanitizeString(username, "Nom")
+      const sanitizedPassword =sanitizeString(password, "Mot de passe")
       const response = await fetch("/api/login", {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username: sanitizedString, password : sanitizedPassword}),
       });
 
       const result = await response.json();
-      setResult(result);
+
       if (!response.ok) {
-        return;
+        throw new Error(
+          result.error || "Erreur lors de la récupération des données",
+        );
       }
+      setResult(result);
       setUsername("");
       setPassword("");
       router.push("/");
     } catch (error) {
-      setResult(error);
+      setError(error);
     }
   };
   return (
-    <main>
+    <Layout>
       <h1>Login</h1>
       <section>
-        <div>{result.message}</div>
+        <div>
+          {result.message || (error.message && `Error: ${error.message}`)}
+        </div>
         <form onSubmit={(e) => handleSubmit(e)}>
           <label htmlFor="login-name">Name</label>
           <br />
@@ -65,6 +82,6 @@ export default function Login() {
           <button type="submit">Valider</button>
         </form>
       </section>
-    </main>
+    </Layout>
   );
 }

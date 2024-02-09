@@ -1,6 +1,7 @@
 
 const express = require('express')
 const User = require('../models/user')
+const logger = require('../logger')
 const router = express.Router()
 
 router.get('/', async (req, res, next) => {
@@ -12,7 +13,7 @@ router.get('/', async (req, res, next) => {
 		})
          
 		if (user == null) {
-			console.error('Le lien est invalide ou a expiré !')
+			logger.error(`Le lien de ${username} est invalide ou a expiré !`)
 			res.status(403).json({message:'Le lien est invalide ou a expiré !'})
 		} else {
 			res.status(200).json({
@@ -21,7 +22,7 @@ router.get('/', async (req, res, next) => {
 		}
           
 	} catch (error) {
-		console.log("Error : " , error)
+		logger.error(`Error :${error.message}`)
 		res.status(500).json({message: error.message})
 	}
 })
