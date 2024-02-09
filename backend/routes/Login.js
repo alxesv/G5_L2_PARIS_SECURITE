@@ -20,7 +20,8 @@ router.post('/',validateInputs, verifyInputs, async (req, res, next) => {
 		if(!isPasswordValid) return res.status(401).json({message: "Identifiant /Mot de passe invalide !"})
 		const accessToken = jwt.sign({username:user.username, isAdmin: user.isAdmin}, process.env.SECRET_KEY, { expiresIn: 60 * 60 })
 		logger.info(`${user.username} s'est connecté.`)
-		res.status(201).json({message: "Connexion réussi", accessToken})
+		const xsrfToken = require('crypto').randomBytes(32).toString('hex')
+		res.status(201).json({message: "Connexion réussi", accessToken, xsrfToken})
 		
 	} catch (error) {
 		logger.error(`Error : ${error.message}`)

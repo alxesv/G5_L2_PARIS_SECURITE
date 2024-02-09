@@ -7,6 +7,7 @@ export default async function handler(req, res) {
     const sanitizedUsername =  sanitizeString(username, 'Nom')
     const response = await fetch(process.env.backend_url + "/login", {
       method: "POST",
+      credentials: 'include',
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -25,6 +26,13 @@ export default async function handler(req, res) {
     setCookie("accessToken", result.accessToken, {
       req,
       res,
+      maxAge: 60 * 60, // 1 hour
+      path: "/",
+    });
+    setCookie("XSRF-TOKEN", result.xsrfToken, {
+      req,
+      res,
+      httpOnly: true, secure:true,
       maxAge: 60 * 60, // 1 hour
       path: "/",
     });
