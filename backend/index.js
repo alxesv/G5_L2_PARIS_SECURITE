@@ -6,6 +6,9 @@ const mongoose = require("mongoose")
 const { auth } = require("./middlewares/auth")
 const logger = require("./logger.js")
 const { isAdmin } = require("./middlewares/isAdmin.js")
+const helmet = require("helmet")
+
+app.use(helmet())
 
 mongoose
 	.connect(process.env.MONGO_URI)
