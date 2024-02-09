@@ -16,7 +16,7 @@ Edit .env file with docker's container url :
     frontend_url=http://frontend:3000
 ```
 
-To run app with docker :
+To run app with docker at repo's root :
 
 ```bash
     docker compose up -d
